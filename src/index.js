@@ -4,14 +4,18 @@ const onClickAdd = () => {
     // テキストボックスの値を取得し初期化する
     const inputText = document.getElementById("add-text").value;
     document.getElementById("add-text").value = "";
+    createUncompleteList(inputText);
+};
     
+// 未完了リストに要素を追加
+const createUncompleteList = (todo) => {
     // divタグ生成
     const div = document.createElement("div");
     div.className = "todo";
 
     // liタグ生成
     const li = document.createElement("li");
-    li.innerText = inputText;
+    li.innerText = todo;
 
     // button(完了)タグ生成
     const completeButton = document.createElement("button");
@@ -24,7 +28,7 @@ const onClickAdd = () => {
         const completeDiv = completeButton.parentNode;
 
         // 完了したTODOを取得
-        const completeTODO =completeDiv.firstElementChild.innerText;
+        const completeTODO = completeDiv.firstElementChild.innerText;
 
         // 完了したTODOのdivタグを初期化
         completeDiv.textContent = null;
@@ -36,6 +40,17 @@ const onClickAdd = () => {
         // button(戻す)タグ生成
         const returnButton = document.createElement("button");
         returnButton.innerText = "戻す";
+        returnButton.addEventListener("click", () =>{
+            // 未完了リストに戻す要素(div)
+            const returnDiv = returnButton.parentElement;
+
+            // 押された戻すボタンの親タグ(div)を完了リストから削除
+            document.getElementById("complete-list").removeChild(returnDiv);
+
+            // 戻すTODOを取得
+            const returnTODO = returnDiv.firstElementChild.innerText;
+            createUncompleteList(returnTODO);
+        });
 
         // divタグの子要素に各要素を設定
         completeDiv.appendChild(li);
@@ -64,6 +79,7 @@ const onClickAdd = () => {
 
 // 未完了リストから指定の要素を削除
 const deleteFromUncompleteList = (target) => {
-    document.getElementById("uncomplete-list").removeChild(target)
-}
+    document.getElementById("uncomplete-list").removeChild(target);
+};
+
 document.getElementById("add-button").addEventListener("click", () => onClickAdd());
